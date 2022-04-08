@@ -12,9 +12,18 @@ provider "aws" {
   region = "us-east-1"
 }
 
+resource "aws_key_pair" "auth" {
+  key_name   = var.key_name
+  public_key = file(var.public_key_path)
+}
+
 resource "aws_instance" "myvm" {
-  ami           = "ami-0b0af3577fe5e3532"
-  instance_type = "t2.micro"
+  ami                    = "ami-0b0af3577fe5e3532"
+  instance_type          = "t2.micro"
+  key_name               = var.key_name
+  vpc_security_group_ids = ["${aws_security_group.myvm_sec_grp.id}"]
+  subnet_id              = aws_subnet.myvm_subnet.id
+  user_data              = file("init-script.sh")
 }
 
 data "aws_ebs_volume" "ebs_volume" {
@@ -42,9 +51,12 @@ resource "aws_ebs_volume" "myvm_example" {
 }
 
 resource "aws_instance" "myvm2" {
-  ami           = "ami-0b0af3577fe5e3532"
-  instance_type = "t2.micro"
-  availability_zone = "us-east-1a"
+  ami                    = "ami-0b0af3577fe5e3532"
+  instance_type          = "t2.micro"
+  availability_zone      = "us-east-1a"
+  key_name               = var.key_name
+  vpc_security_group_ids = ["${aws_security_group.myvm_sec_grp.id}"]
+  subnet_id              = aws_subnet.myvm_subnet.id
 }
 
 resource "aws_volume_attachment" "myvm2-vol" {
