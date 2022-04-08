@@ -10,7 +10,7 @@ This script will do following
 
 On successfull run of above script will yield following resources in your AWS account
 
-1. 2 EC2 instances - Source, Target
-2. 3 EBS volumes - Attached 2 volumes to source
+*. 2 EC2 instances - Source, Target
+*. 3 EBS volumes - Attached 2 volumes to source
                  - Attached 1 volume to target
-3. 1 snapshot
+*. 1 snapshot
